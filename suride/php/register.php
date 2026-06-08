@@ -8,18 +8,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-/* =========================================
-   JSON RESPONSE HELPER
-========================================= */
+/*JSON RESPONSE HELPER*/
 function jsonResponse($data, $status = 200) {
     http_response_code($status);
     echo json_encode($data);
     exit;
 }
 
-/* =========================================
-   ONLY ALLOW POST
-========================================= */
+/*ONLY ALLOW POST*/
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonResponse([
         'success' => false,
@@ -27,9 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     ], 405);
 }
 
-/* =========================================
-   GET JSON BODY
-========================================= */
+/*GET JSON BODY*/
 $body = json_decode(file_get_contents('php://input'), true);
 
 $firstName = trim($body['first_name'] ?? '');
@@ -38,9 +32,7 @@ $email     = trim(strtolower($body['email'] ?? ''));
 $phone     = trim($body['phone'] ?? '');
 $password  = $body['password'] ?? '';
 
-/* =========================================
-   VALIDATION
-========================================= */
+/*VALIDATION*/
 $errors = [];
 
 if (strlen($firstName) < 2) {
@@ -67,9 +59,7 @@ if (!empty($errors)) {
     ], 422);
 }
 
-/* =========================================
-   CHECK DUPLICATE EMAIL
-========================================= */
+/*CHECK DUPLICATE EMAIL*/
 // Disesuaikan: memakai user_id sesuai skema suride_setup.sql
 $checkSql = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
 
@@ -93,14 +83,12 @@ if ($result->num_rows > 0) {
     ], 409);
 }
 
-/* =========================================
-   INSERT USER
-========================================= */
+/*INSERT USER*/
 $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 $role = 'customer';
 $fullName = $firstName . ' ' . $lastName;
 
-// PERBAIKAN: Kolom diubah menjadi `name` dan ditambah `phone` agar data nomor hp tersimpan
+// Kolom diubah menjadi `name` dan ditambah `phone` agar data nomor hp tersimpan
 $insertSql = "
     INSERT INTO users
     (name, email, phone, password, role)
@@ -135,14 +123,10 @@ if (!$success) {
     ], 500);
 }
 
-/* =========================================
-   GET NEW USER ID
-========================================= */
+/*GET NEW USER ID*/
 $newUserId = $conn->insert_id;
 
-/* =========================================
-   CREATE SESSION
-========================================= */
+/*CREATE SESSION*/
 $_SESSION['suride_user'] = [
     'user_id' => $newUserId,
     'name'    => $fullName,
@@ -150,9 +134,7 @@ $_SESSION['suride_user'] = [
     'role'    => 'customer'
 ];
 
-/* =========================================
-   SUCCESS RESPONSE
-========================================= */
+/*SUCCESS RESPONSE*/
 jsonResponse([
     'success' => true,
     'message' => 'Registration successful.',

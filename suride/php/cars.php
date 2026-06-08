@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST');
 
 require_once 'db.php';
 
-// ─── helper ───────────────────────────────────────────────
+// helper
 function respond($data, $code = 200) {
     http_response_code($code);
     echo json_encode($data);
@@ -15,7 +15,7 @@ function respond($data, $code = 200) {
 
 $action = trim($_GET['action'] ?? '');
 
-// ─── GET cars ─────────────────────────────────────────────
+// GET cars
 if ($action === 'get') {
 
     $stmt = $conn->prepare("
@@ -52,7 +52,7 @@ if ($action === 'get') {
     respond(['success' => true, 'cars' => $cars]);
 }
 
-// ─── ADD car ──────────────────────────────────────────────
+// ADD car 
 if ($action === 'add') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -95,7 +95,7 @@ if ($action === 'add') {
     }
 }
 
-// ─── UPDATE car ───────────────────────────────────────────
+// UPDATE car 
 if ($action === 'update') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -150,7 +150,7 @@ if ($action === 'update') {
     }
 }
 
-// ─── DELETE car ───────────────────────────────────────────
+// DELETE car 
 if ($action === 'delete') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -182,5 +182,5 @@ if ($action === 'delete') {
     }
 }
 
-// ─── fallback ─────────────────────────────────────────────
+// fallback 
 respond(['success' => false, 'message' => 'Unknown action. Use ?action=get|add|update|delete'], 400);

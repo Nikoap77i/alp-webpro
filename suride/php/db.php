@@ -1,13 +1,10 @@
 <?php
-// ============================================================
-// SuRide - Database Connection
-// ============================================================
-// Edit these credentials to match your server configuration.
+// SuRide Database Connection
 
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');        // your MySQL username
-define('DB_PASS', '');            // your MySQL password
-define('DB_NAME', 'suride_db');   // your database name
+define('DB_USER', 'root');        // MySQL username
+define('DB_PASS', '');            // MySQL password
+define('DB_NAME', 'suride_db');   // database name
 
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 

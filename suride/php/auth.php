@@ -6,7 +6,7 @@ require_once __DIR__ . '/db.php';
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-// ─── helper ───────────────────────────────────────────────
+// helper 
 function respond($data, $code = 200) {
     http_response_code($code);
     echo json_encode($data);
@@ -15,7 +15,7 @@ function respond($data, $code = 200) {
 
 $action = trim($_GET['action'] ?? '');
 
-// ─── LOGIN ────────────────────────────────────────────────
+// LOGIN 
 if ($action === 'login') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -73,7 +73,7 @@ if ($action === 'login') {
     ]);
 }
 
-// ─── LOGOUT ───────────────────────────────────────────────
+// LOGOUT 
 if ($action === 'logout') {
 
     $_SESSION = [];
@@ -91,5 +91,5 @@ if ($action === 'logout') {
     respond(['success' => true, 'message' => 'Logged out successfully.']);
 }
 
-// ─── fallback ─────────────────────────────────────────────
+// fallback 
 respond(['success' => false, 'message' => 'Unknown action. Use ?action=login|logout'], 400);

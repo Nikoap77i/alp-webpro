@@ -6,7 +6,7 @@ header('Access-Control-Allow-Methods: GET, POST');
 
 require_once 'db.php';
 
-// ─── helper ───────────────────────────────────────────────
+// helper 
 function respond($data, $code = 200) {
     http_response_code($code);
     echo json_encode($data);
@@ -15,7 +15,7 @@ function respond($data, $code = 200) {
 
 $action = trim($_GET['action'] ?? '');
 
-// ─── GET drivers ──────────────────────────────────────────
+// GET drivers
 if ($action === 'get') {
 
     $stmt = $conn->prepare("
@@ -40,7 +40,7 @@ if ($action === 'get') {
     respond(['success' => true, 'drivers' => $drivers]);
 }
 
-// ─── ADD driver ───────────────────────────────────────────
+// ADD driver 
 if ($action === 'add') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -77,7 +77,7 @@ if ($action === 'add') {
     }
 }
 
-// ─── UPDATE driver ────────────────────────────────────────
+// UPDATE driver
 if ($action === 'update') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -126,7 +126,7 @@ if ($action === 'update') {
     }
 }
 
-// ─── DELETE driver ────────────────────────────────────────
+// DELETE driver
 if ($action === 'delete') {
 
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -158,5 +158,5 @@ if ($action === 'delete') {
     }
 }
 
-// ─── fallback ─────────────────────────────────────────────
+// fallback 
 respond(['success' => false, 'message' => 'Unknown action. Use ?action=get|add|update|delete'], 400);
